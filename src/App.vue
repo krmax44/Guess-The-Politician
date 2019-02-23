@@ -1,28 +1,61 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app dark>
+    <v-toolbar app color="primary">
+      <v-toolbar-title>Guess The Politician</v-toolbar-title>
+      <v-spacer/>
+      <span v-if="party.id !== null && party.started === false">Join the party: {{ party.id }}</span>
+    </v-toolbar>
+
+    <PlayerScores v-if="started" :players="players"/>
+
+    <v-content>
+      <v-container fill-height>
+        <v-layout align-center>
+          <EnterParty v-if="party.id === null"/>
+          <WaitingForPlayers
+            v-if="party.id !== null && party.started === false"
+            :party="party"
+            :players="players"
+          />
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import EnterParty from './components/EnterParty';
+import WaitingForPlayers from './components/WaitingForPlayers';
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    HelloWorld
+    EnterParty,
+    WaitingForPlayers
+  },
+  data() {
+    return {
+      party: {
+        id: null,
+        started: false
+      },
+      player: {
+        id: null,
+        name: null
+      }
+    };
+  },
+  computed: {
+    started() {
+      return this.party.id !== null && this.party.started === false;
+    }
+  },
+  sockets: {
+    dataUpdate(data) {
+      this.party = data.party;
+      this.player = data.player;
+      this.players = data.players;
+    }
   }
-}
+};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
