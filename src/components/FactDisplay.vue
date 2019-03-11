@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs12 sm6 offset-sm3>
+  <v-flex xs12 sm6 offset-sm3 style="flex: 2">
     <v-card>
       <v-img v-if="fact.mediatype === 'image'" :src="fact.content" class="media-image"/>
       <v-card-text>

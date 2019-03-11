@@ -7,7 +7,7 @@ Vue.config.productionTip = false
 
 Vue.use(new VueSocketIO({
   debug: process.env.NODE_ENV === 'development',
-  connection: 'http://localhost:3000'
+  connection: process.env.VUE_APP_BACKEND
 }));
 
 new Vue({
